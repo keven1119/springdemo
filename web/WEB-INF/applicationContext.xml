@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="test" class="com.keven.spring.beans.Test">
+        <property name="name">
+            <value>this is xml test  name</value>
+        </property>
+
+    </bean>
+    <bean id="user" class="com.keven.spring.beans.User">
+        <constructor-arg>
+            <value>keven</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>30</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>男</value>
+        </constructor-arg>
+    </bean>
+
+    <bean name="/main.do" class="com.keven.spring.beans.Manager">
+        <property name="user">
+            <ref local="user"/>
+        </property>
+    </bean>
+</beans>

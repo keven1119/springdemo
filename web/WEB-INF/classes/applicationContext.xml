@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="test" class="com.keven.spring.beans.Test">
+        <property name="name">
+            <value>this is xml test  name</value>
+        </property>
+
+    </bean>
+    <bean id="user" class="com.keven.spring.beans.User">
+        <constructor-arg>
+            <value>keven</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>30</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>男</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://localhost:3306/test</value>
+        </property>
+        <property name="username">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>kobe23kb</value>
+        </property>
+    </bean>
+
+    <bean id="userDAO" class="com.keven.spring.daos.UserDao">
+        <property name="dataSource">
+            <ref local="datasource"></ref>
+        </property>
+    </bean>
+
+    <bean name="manager" class="com.keven.spring.beans.Manager">
+        <property name="user">
+            <ref local="user"/>
+        </property>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice">
+            <ref bean="MyAdvisor" />
+        </property>
+
+        <property name="patterns">
+            <list>
+                <value>.*getConn*.</value>
+                <value>.*closeConn*.</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--定义事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource">
+            <ref bean="datasource"></ref>
+        </property>
+    </bean>
+
+    <!--定义 TransatiionTemplate模版-->
+     <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+         <property name="transactionManager">
+             <ref bean="transactionManager"></ref>
+         </property>
+         <!--<property name="propagationBehaviorName">-->
+             <!--<value>PROPAGATION_REQUERED</value>-->
+         <!--</property>-->
+     </bean>
+
+    <bean id="transactionExample" class="com.keven.spring.TransactionExample">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+
+        <property name="transactionTemplate">
+            <ref bean="transactionTemplate"></ref>
+        </property>
+
+        <property name="dataSource">
+            <ref bean="datasource"></ref>
+        </property>
+    </bean>
+
+</beans>
